@@ -32,12 +32,20 @@ day_before_yesterday = float(data_list[1]['4. close'])
 diff = abs(yesterday_closing - day_before_yesterday)
 print(f"{diff:.2f}")
 #TODO 4. - Work out the percentage difference in price between closing price yesterday and closing price the day before yesterday.
-
+percentage = (diff / day_before_yesterday) * 100
+print(f"{percentage:.2f}%")
 #TODO 5. - If TODO4 percentage is greater than 5 then print("Get News").
-
+if percentage > 5:
+    print("Get News")
     ## STEP 2: https://newsapi.org/ 
-    # Instead of printing ("Get News"), actually get the first 3 news pieces for the COMPANY_NAME. 
-
+    # Instead of printing ("Get News"), actually get the first 3 news pieces for the COMPANY_NAME.
+news_params = {
+    "q": COMPANY_NAME,
+    "apiKey": "fa7167f4050e4b22848c84a2e1940e82"
+}
+news_response = requests.get(NEWS_ENDPOINT, params=news_params)
+data = news_response.json()
+print(data)
 #TODO 6. - Instead of printing ("Get News"), use the News API to get articles related to the COMPANY_NAME.
 
 #TODO 7. - Use Python slice operator to create a list that contains the first 3 articles. Hint: https://stackoverflow.com/questions/509211/understanding-slice-notation
