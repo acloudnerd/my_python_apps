@@ -1,9 +1,11 @@
 import requests
+from datetime import datetime
 
 USERNAME = "acloudnerd"
 TOKEN = "dfahdgfdy7f6qi3vh3da"
 pixela_endpoint = "https://pixe.la/v1/users"
 GRAPH_ID = "graph1"
+TODAY = datetime.today().strftime("%Y%m%d")
 
 user_params = {
     "token": TOKEN,
@@ -34,11 +36,23 @@ headers = {
 
 pixela_creation_endpoint = f"{graph_endpoint}/{GRAPH_ID}"
 pixel_data = {
-    "date": "20260819",
-    "quantity": "3",
+    "date": TODAY,
+    "quantity": "5",
 }
 
-response = requests.post(url = pixela_creation_endpoint, json=pixel_data, headers=headers)
+# response = requests.post(url=pixela_creation_endpoint, json=pixel_data, headers=headers)
+# print(response.text)
+
+update_endpoint = f"{pixela_endpoint}/{USERNAME}/graphs/{GRAPH_ID}/20260819"
+
+new_pixel_data = {
+    "quantity": "8",
+}
+
+# response = requests.put(url=update_endpoint, json=new_pixel_data, headers=headers)
+# print(response.text)
+
+delete_endpoint = f"{pixela_endpoint}/{USERNAME}/graphs/{GRAPH_ID}/20260819"
+
+response = requests.delete(url=delete_endpoint, headers=headers, json=new_pixel_data)
 print(response.text)
-
-
