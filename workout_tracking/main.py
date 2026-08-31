@@ -5,9 +5,9 @@ API_KEY = "nix_live_ppY1AWVdoHzqQQzSKHGSntg1NBR1uiTW"
 ENDPOINT = "https://app.100daysofpython.dev/v1/nutrition/natural/exercise"
 # SHEET_ENDPOINT = 
 GENDER = "male"
-WEIGHT = "64"
-HEIGHT = "1.86"
-AGE = "27"
+WEIGHT = 64
+HEIGHT = 1.86
+AGE = 27
 
 
 input_text = input("What exercise(s) did you do? ")
@@ -19,7 +19,7 @@ headers = {
 
 params = {
     "query": "indoor run for 10 mins",
-    "gender": "male",
+    "gender": GENDER,
     "weight_kg": WEIGHT,
     "height_cm": HEIGHT,
     "age": AGE
