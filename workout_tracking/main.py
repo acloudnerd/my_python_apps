@@ -9,6 +9,8 @@ GENDER = "male"
 WEIGHT = 64
 HEIGHT = 1.86
 AGE = 27
+USERNAME = "teemat"
+PSWD = "tryOutBasicAuth1"
 
 
 input_text = input("What exercise(s) did you do? ")
@@ -44,6 +46,15 @@ for exercise in result["exercises"]:
         }
     }
 
-    sheety_response = requests.post(SHEETY_ENDPOINT, json=sheety_inputs)
+
+    # basic auth
+    
+    sheety_response = requests.post(SHEETY_ENDPOINT, json=sheety_inputs,
+                                    auth=(USERNAME, PSWD))
     sheety_results = sheety_response.json()
     print(sheety_results)
+
+
+
+
+
