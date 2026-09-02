@@ -1,17 +1,23 @@
 import requests
 from datetime import datetime 
+import os
+from dotenv import load_dotenv
 
-APP_ID = "app_6cd52af399ef4d85886b3c6c"
-API_KEY = "nix_live_ppY1AWVdoHzqQQzSKHGSntg1NBR1uiTW"
 ENDPOINT = "https://app.100daysofpython.dev/v1/nutrition/natural/exercise"
 SHEETY_ENDPOINT = "https://api.sheety.co/901906ea70c3a57fdbeee98a6e24dbe9/tshepoMyWorkouts/workouts"
 GENDER = "male"
 WEIGHT = 64
 HEIGHT = 1.86
 AGE = 27
-USERNAME = "teemat"
-PSWD = "tryOutBasicAuth1"
 
+
+load_dotenv()
+
+APP_ID  = os.environ["NUTRITIONIX_APP_ID"]
+API_KEY = os.environ["NUTRITIONIX_API_KEY"]
+USERNAME = os.environ["SHEETY_USERNAME"]
+PSWD = os.environ["SHEETY_PASSWORD"]
+ 
 
 input_text = input("What exercise(s) did you do? ")
 
