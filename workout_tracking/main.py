@@ -27,38 +27,43 @@ headers = {
 }
 
 params = {
-    "query": "indoor run for 10 mins",
+    "query": input_text,
     "gender": GENDER,
     "weight_kg": WEIGHT,
     "height_cm": HEIGHT,
     "age": AGE
 }
+try:
+    response = requests.post(url=ENDPOINT, json=params, headers=headers, timeout=10)
+    response.raise_for_status()
+    result = response.json()
 
-response = requests.post(url=ENDPOINT, json=params, headers=headers)
-result = response.json()
-print(result)
+except requests.exceptions.RequestException as e:
+    print(f"Failed to fetch exercise data: {e}")
+    exit(1)
 
 current_date = datetime.now().strftime("%d/%m/%Y")
 now = datetime.now().strftime("%X")
 
 for exercise in result["exercises"]:
     sheety_inputs = {
-        "workout":{
+        "workout": {
             "date": current_date,
-            "time" : now,
+            "time": now,
             "exercise": exercise["name"].title(),
             "durations": exercise["duration_min"],
             "calories": exercise["nf_calories"]
         }
     }
 
-
-    # basic auth
-    
-    sheety_response = requests.post(SHEETY_ENDPOINT, json=sheety_inputs,
-                                    auth=(USERNAME, PSWD))
-    sheety_results = sheety_response.json()
-    print(sheety_results)
+    try:
+        sheety_response = requests.post(SHEETY_ENDPOINT, json=sheety_inputs,
+                                         auth=(USERNAME, PSWD), timeout=10)
+        sheety_response.raise_for_status()
+        sheety_results = sheety_response.json()
+        print(sheety_results)
+    except requests.exceptions.RequestException as e:
+        print(f"Failed to log '{exercise['name']}' to Sheety: {e}")
 
 
 
