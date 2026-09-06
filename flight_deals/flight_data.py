@@ -10,17 +10,15 @@ class FlightData:
     FLIGHT_API = "https://serpapi.com/search"
 
     def __init__(self):
-        self.api_key = os.environ["API_KEY"]
+        self.api_key = os.environ["SERP_API_KEY"]
 
-    def get_flight_data(self):
-        outbound_date = (date.today() + timedelta(days=30)).isoformat()
-        return_date = (date.today() + timedelta(days=37)).isoformat()
+    def get_flight_data(self, origin_city_cd, destination_city_cd, out_date, return_date):
 
         params = {
             "engine": "google_flights",
-            "departure_id": "CDG",
-            "arrival_id": "AUS",
-            "outbound_date": outbound_date,
+            "departure_id": origin_city_cd,
+            "arrival_id": destination_city_cd,
+            "outbound_date": out_date,
             "return_date": return_date,
             "api_key": self.api_key,
         }
@@ -29,3 +27,14 @@ class FlightData:
         response.raise_for_status()
 
         return response.json()
+    
+def find_cheapest_flight(data, return_date):
+        all_flights = data.get("best_flights", []) + data.get("other_flights", [])
+        if not all_flights:
+            print("No flight data available")
+            return None
+        else:
+            cheapest_flight = min(all_flights, key=lambda flight: flight["price"])
+            return cheapest_flight
+            
+        
