@@ -26,3 +26,11 @@ class DataManager:
         
         return response.json()
     
+    def update_lowest_price(self, row_id, new_price):
+        nu_data = {
+            "price": {
+                "lowestPrice": new_price
+            }
+        }
+        requests.put(url=f"{self.SHEETY_ENDPOINT}/{row_id}", json=nu_data,auth=(self.username, self.password))
+    
