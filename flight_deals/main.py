@@ -1,5 +1,4 @@
 #This file will need to use the DataManager,FlightSearch, FlightData, NotificationManager classes to achieve the program requirements.
-import requests_cache
 from data_manager import DataManager
 from flight_data import FlightData, find_cheapest_flight
 from datetime import date, timedelta
@@ -14,15 +13,18 @@ six_months_from_today = (tdy + timedelta(weeks=24)).isoformat()
 
 data_manager = DataManager()
 sheet_data = data_manager.get_data()["prices"]
-destination = sheet_data[0]  # CDG / Paris is the first row in the spreadsheet
 
-flight_data = FlightData(origin_airport="LHR", destination_airport=destination["iataCode"], out_date=tomorrow, return_date=six_months_from_today)
-data = flight_data.get_flight_data()
+# Stay within the free-tier SerpApi limit - only check a handful of destinations.
+destinations_to_check = sheet_data[:3]
 
-cheapest_flight = find_cheapest_flight(data, return_date=six_months_from_today)
+for destination in destinations_to_check:
+    flight_data = FlightData(origin_airport="LHR", destination_airport=destination["iataCode"], out_date=tomorrow, return_date=six_months_from_today)
+    data = flight_data.get_flight_data()
 
-print(f"{destination['city']}: GBP {cheapest_flight.price}")
+    cheapest_flight = find_cheapest_flight(data, return_date=six_months_from_today)
 
-if cheapest_flight.price != "N/A" and cheapest_flight.price < destination["lowestPrice"]:
-    print(f"Lower price flight found to {destination['city']}!")
-    data_manager.update_lowest_price(row_id=destination["id"], new_price=cheapest_flight.price)
+    print(f"{destination['city']}: GBP {cheapest_flight.price}")
+
+    if cheapest_flight.price != "N/A" and cheapest_flight.price < destination["lowestPrice"]:
+        print(f"Lower price flight found to {destination['city']}!")
+        data_manager.update_lowest_price(row_id=destination["id"], new_price=cheapest_flight.price)

@@ -32,5 +32,6 @@ class DataManager:
                 "lowestPrice": new_price
             }
         }
-        requests.put(url=f"{self.SHEETY_ENDPOINT}/{row_id}", json=nu_data,auth=(self.username, self.password))
+        response = requests.put(url=f"{self.SHEETY_ENDPOINT}/{row_id}", json=nu_data, auth=(self.username, self.password))
+        response.raise_for_status()
     

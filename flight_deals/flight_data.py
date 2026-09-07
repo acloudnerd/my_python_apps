@@ -1,13 +1,15 @@
-import requests
+import requests_cache
 from dotenv import load_dotenv
 import os
-from datetime import date, timedelta
 
 load_dotenv()
 
 class FlightData:
     #This class is responsible for structuring the flight data.
     FLIGHT_API = "https://serpapi.com/search"
+    # SerpApi has a rate limit, and results for the same route/dates don't
+    # change minute to minute, so cache responses instead of re-fetching.
+    SESSION = requests_cache.CachedSession("flight_search_cache", expire_after=3600)
 
     def __init__(self, price=None, origin_airport=None, destination_airport=None, out_date=None, return_date=None):
         self.api_key = os.environ["SERP_API_KEY"]
@@ -28,7 +30,7 @@ class FlightData:
             "api_key": self.api_key,
         }
 
-        response = requests.get(self.FLIGHT_API, params=params)
+        response = self.SESSION.get(self.FLIGHT_API, params=params)
         response.raise_for_status()
 
         return response.json()
